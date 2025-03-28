@@ -121,7 +121,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // Dokumentaatio: https://www.omdbapi.com/ + https://app.readthedocs.org/projects/omdbpy/downloads/pdf/latest/
 
 // OMDb API-tiedot
-const apiKey = '989bb24e';
+//hoidetaan git ignoren kautta myöhemmin, api-avain vain paikallisesti
+const apiKey = 'tähän apiKey';
 const apiUrl = `http://www.omdbapi.com/?apikey=${apiKey}`;
 
 // Hakukentän toiminnallisuus
