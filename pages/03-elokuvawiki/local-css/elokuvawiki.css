@@ -62,7 +62,7 @@ body {
 /*Hakukentän tulosten muotoilu*/
 
 .search-result-container {
-    display: grid !important;
+    display: grid;
     grid-template-columns: 50% 50%;
     margin: 5%;
     padding: 5%;
@@ -82,7 +82,7 @@ body {
 .search-result-title,
 .search-result-text {
     text-align: center;
-    display: grid !important;
+    display: grid;
     grid-column: 2 / 3;
     width: 70%;
 }
