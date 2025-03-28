@@ -1,4 +1,4 @@
-# WEB15_Ryhma4_Web-projekti_dynaaminen
+# Dynamic-WEB15_Ryhma4_Web-projekti
 
 Taitotalo Web-projekti: dynaaminen osaprojekti
 
