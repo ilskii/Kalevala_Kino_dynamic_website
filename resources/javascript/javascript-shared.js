@@ -115,3 +115,80 @@ document.addEventListener("DOMContentLoaded", () => {
         slide.style.display = index === 0 ? "block" : "none";
     });
 });
+
+// Elokuva tietokannan API
+
+// OMDb API-tiedot
+const apiKey = '989bb24e';
+const apiUrl = `http://www.omdbapi.com/?apikey=${apiKey}`;
+
+// Hakukentän toiminnallisuus
+document.getElementById('movie-search').addEventListener('input', async (event) => {
+    const query = event.target.value; // Käyttäjän hakutermi
+    if (query.length > 2) { // Suorita haku vain, jos hakutermi on pidempi kuin 2 merkkiä
+        try {
+            const response = await fetch(`${apiUrl}&s=${query}`);
+            if (!response.ok) throw new Error('Verkkovirhe API-kutsussa');
+            
+            const data = await response.json();
+            if (data.Search) {
+                const suggestionsElement = document.getElementById('search-suggestions');
+                suggestionsElement.textContent = ''; // Tyhjennä edelliset hakuehdotukset
+
+                // Lisää elokuvat hakuehdotuksiin
+                data.Search.forEach(movie => {
+                    const option = document.createElement('option');
+                    option.value = movie.Title; // Elokuvan otsikko
+                    suggestionsElement.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Virhe hakutuloksissa:', error);
+        }
+    }
+});
+
+// Valitun elokuvan tiedot
+document.getElementById('movie-search').addEventListener('change', async (event) => {
+    const selectedMovie = event.target.value; // Käyttäjän valitsema elokuva
+    try {
+        const response = await fetch(`${apiUrl}&t=${selectedMovie}`);
+        if (!response.ok) throw new Error('Verkkovirhe API-kutsussa');
+        
+        const data = await response.json();
+        const searchResultTitle = document.getElementById('search-result-title');
+        const searchResultImage = document.querySelector('.search-result-image');
+        const searchResultText = document.querySelector('.search-result-text');
+
+        if (data.Response === "True") {
+            // Päivitä elokuvan otsikko
+            searchResultTitle.textContent = data.Title;
+
+            // Päivitä elokuvan kansikuva
+            searchResultImage.src = data.Poster !== "N/A" ? data.Poster : "path/to/default_image.png";
+            searchResultImage.alt = `${data.Title} movie poster`;
+
+            // Päivitä elokuvan tiedot (vuosi, genre, juoni)
+            searchResultText.textContent = ''; // Tyhjennä edelliset tiedot
+            const year = document.createElement('p');
+            year.textContent = `Year: ${data.Year}`;
+            const genre = document.createElement('p');
+            genre.textContent = `Genre: ${data.Genre}`;
+            const plot = document.createElement('p');
+            plot.textContent = `Plot: ${data.Plot}`;
+
+            searchResultText.appendChild(year);
+            searchResultText.appendChild(genre);
+            searchResultText.appendChild(plot);
+        } else {
+            // Näytä viesti, jos elokuvaa ei löydy
+            searchResultTitle.textContent = 'Elokuvaa ei löytynyt';
+            searchResultImage.src = 'path/to/default_image.png';
+            searchResultImage.alt = 'Oletuskansikuva';
+            searchResultText.textContent = 'Ei tietoja saatavilla tästä elokuvasta.';
+        }
+    } catch (error) {
+        console.error('Virhe elokuvan tiedoissa:', error);
+    }
+});
+
