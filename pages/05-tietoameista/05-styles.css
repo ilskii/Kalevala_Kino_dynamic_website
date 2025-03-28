@@ -1,0 +1,495 @@
+/* Perustyylit */
+
+.hero img {
+    display: block; /* Poistaa oletusarvoiset rivinvaihdot kuvan ympäriltä */
+    margin: 0; /* Poistaa kaikki marginaalit */
+    padding: 0; /* Poistaa mahdolliset tyhjät tilat */
+    width: 100%; /* Varmistaa, että kuva täyttää koko alueen */
+    height: 600px;
+    transition: filter 0.5s ease, transform 0.5s ease; /* Siirtymät mustavalkoiseen ja pienen zoomin */
+}
+.hero img:hover {
+    filter: grayscale(100%); /* Mustavalkoinen efekti */
+    transform: scale(1.05); /* Kevyt zoom-efekti */
+}
+
+.about {
+    background-color: #14162e;
+    padding: 20px;
+    text-align: center;
+    color: #f8f5f5;
+}
+.about h1 {
+    font-family: "Pirata One", system-ui;
+    font-size: 6rem; /* Tekee fontista suuren */
+    font-weight: bold; /* Halutessasi voit myös säätää fontin paksuutta */
+    text-align: center; /* Keskittää otsikon */
+    letter-spacing: 5px; /* Lisää kirjainten väliä */
+    color: #ffde9c; /* Vaihtoehtoisesti muuta tekstin väri */
+    margin: 5px 0;   /* Ylä- ja alareunan marginaalit pieniksi (esim. 5px) */
+}
+
+
+.about p {
+    /* margin: 5px 0; Poistaa ylimääräiset marginaalit kappaleesta */
+    padding-top: 10px; /* Lisää hieman väliä otsikon ja tekstin väliin */
+    font-size: large;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin: 0 auto;
+    max-width: 800px; /* Rajoittaa tekstin leveyden */
+}
+.button {
+    display: inline-block;
+    background-color: #f2d852;
+    color: #000;
+    text-decoration: none; /* Poistaa alleviivauksen */
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #9bcfb8;
+}
+
+
+
+.about-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.about-content p {
+    max-width: 800px;
+    margin: 10px 0;
+}
+
+.about-content button {
+    padding: 10px 20px;
+    background-color: #f2d852;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 15px;
+}
+/* Teatteri Kuvien tyylit */
+.theatre {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsiivinen asettelu */
+    gap: 20px; /* Väli kuvien välillä */
+    margin-top: 30px;
+    padding: 10px;
+}
+
+.theatre img {
+    width: 100%;
+    height: 400px; /* Kuvan mittasuhteiden säilyttäminen */
+    border-radius: 20px; /* Pyöristetyt kulmat */
+    box-shadow: 0 4px 6px rgba(243, 222, 31, 0.2); /* Kevyt varjo */
+    transition: transform 0.3s ease; /* Hover-efekti */
+}
+
+.theatre img:hover {
+    transform: scale(1.05); /* Suurentaminen hoverilla */
+}
+
+
+
+
+
+.contact-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #29404E; /* Taustaväri */
+    color: white; /* Tekstiväri */
+}
+.contact-info h2 {
+    font-family:  "Pirata One", system-ui; 
+    font-size: 3rem; /* Tekee fontista suuren */
+    display: flex;
+    justify-content: center;
+    letter-spacing: 5px; /* Lisää kirjainten väliä */
+}
+.address {
+    flex: 1;
+    margin-right: 20px;
+    
+}
+
+.address {
+    text-align: center; /* Tekstin keskitys */
+    margin: 0 auto; /* Keskittää mahdolliset leveydet */
+    
+}
+
+.map {
+    flex: 1;
+}
+.map iframe {
+    width: 100%; /* Asettaa leveydeksi 100% vanhempielementin leveydestä */
+    height: auto; /* Korkeus mukautuu automaattisesti */
+    aspect-ratio: 16/9; /* Säilyttää oikean kuvasuhteen */
+    border: 0; /* Poistaa reunukset */
+    max-width: 600px; /* Maksimikoko suuremmilla näytöillä */
+    margin: 0 auto; /* Keskittää kartan, jos tarvitaan */
+}
+@media screen and (max-width: 768px) {
+    .contact-info {
+        flex-direction: column; /* Muuttaa flexin pystysuuntaiseksi */
+        align-items: center; /* Keskittää sisältö pystysuunnassa */
+    }
+
+    .address, .map {
+        flex: none;
+        width: 100%; /* Asettaa täyden leveyden mobiilissa */
+        text-align: center; /* Keskittää tekstit */
+    }
+
+    .map iframe {
+        max-width: 100%; /* Varmistaa, että iframe ei ylitä ruutua */
+    }
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Väli ikonien välillä */
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.social-icon {
+    text-decoration: none;
+    font-size: 30px; /* Ikonien koko */
+    color: #fff; /* Oletusväri */
+    transition: color 0.3s ease; transform: 0.3s ease;
+}
+
+.social-icon:hover {
+    color: #ffc107; /* Hover-väri */
+    transform: scale(1.2);
+}
+/* Responsiivisuus */
+@media screen and (max-width: 768px) {
+    .social-icons {
+        gap: 10px; /* Pienempi väli pienillä näytöillä */
+    }
+
+    .social-icon {
+        font-size: 24px; /* Pienennä ikonien kokoa pienemmillä ruuduilla */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .social-icons {
+        gap: 5px; /* Entistä tiiviimpi väli */
+    }
+
+    .social-icon {
+        font-size: 20px; /* Ikonit skaalautuvat vielä pienemmiksi */
+    }
+}
+
+
+
+
+/* Värikoodit eri somealustoille */
+.social-icon.tiktok:hover {
+    color: #69c9d0;
+}
+
+.social-icon.instagram:hover {
+    color: #e1306c;
+}
+
+.social-icon.facebook:hover {
+    color: #3b5998;
+}
+
+.social-icon.youtube:hover {
+    color: #ff0000;
+}
+
+.movies {
+    padding: 20px;
+    text-align: center;
+    letter-spacing: 5px; /* Lisää kirjainten väliä */
+    background-color: #2c2c54;
+}
+.movies h2 {
+    font-family:  "Pirata One", system-ui; 
+    font-size: 4rem; /* Tekee fontista suuren */
+    font-weight: bold; /* Halutessasi voit myös säätää fontin paksuutta */
+    text-align: center; /* Keskittää otsikon */
+    color: #ffffff; /* Vaihtoehtoisesti muuta tekstin väri */
+    margin: 5px 5px;   /* Ylä- ja alareunan marginaalit pieniksi (esim. 5px) */
+}
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+/* Button styling */
+.movie-button {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f2d852;
+    color: #030303;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 10;
+}
+
+/* Button hover effect */
+.movie-button:hover {
+    background-color: #282b58;
+    color: #fff;
+}
+
+.movie-card {
+    position: relative; /*kortin viitekehys napille*/
+    background-color: #9bcfb6; /* Taustaväri kortille */
+    border-radius: 10px; /* Pyöristetyt kulmat */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Alkuvarjo */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth efekti */
+    overflow: hidden;
+    text-align: center; /* Tekstit keskitetty */
+    padding: 30px;
+}
+
+.movie-card:hover {
+    transform: scale(1.05); /* Kortin suurennus hoverilla */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Korostettu varjo hoverilla */
+}
+
+.movie-card img {
+    border-radius: 10px; /* Kuvien pyöristetyt kulmat */
+    transition: transform 0.3s ease; /* Smooth efekti kuville */
+}
+
+.movie-card:hover img {
+    transform: scale(1.1); /* Kuvan suurennus hoverilla */
+}
+
+.movie-card h3, .movie-card p, .movie-card .tag {
+    margin: 17px 0;
+  
+}
+
+.movie-card .tag {
+    font-size: 0.9rem;
+    color: #555;
+    font-style: italic;
+}
+
+
+
+/* Responsiiviset tyylit */
+@media (max-width: 1024px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .contact-info {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .contact-info .address, .contact-info .map {
+        flex: none;
+        width: 100%;
+    }
+
+    .about-content {
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero img {
+        height: 300px;
+        object-fit: cover;
+    }
+
+    .movies h2 {
+        font-size: 1.5rem;
+    }
+
+    .movie-card {
+        padding: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 10px;
+    }
+
+    .search-bar input {
+        width: 100%;
+    }
+
+    .about {
+        padding: 10px;
+    }
+
+    .about-content p {
+        font-size: 0.9rem;
+    }
+
+    .contact-info {
+        padding: 10px;
+    }
+
+    .movie-card h3 {
+        font-size: 1rem;
+    }
+}
+/* FOOD Karuselli */
+.food-carousel {
+    padding: 20px;
+    text-align: center;
+    background-color: #282b58;
+    margin-top: 80px; /* Nostetaan karusellia headerin alle */
+    position: relative; /* Mahdollistaa parallaksin */
+    z-index: 1; /* Priorisoi karusellin näkymän */
+
+}
+
+.food-carousel h2 {
+    font-family: "Pirata One", sans-serif;
+    font-size: 4.5rem;
+    letter-spacing: 5px; /* Lisää kirjainten väliä */
+    margin-bottom: 20px;
+    color: #ffde9c;
+}
+
+.carousel-container {
+    position: relative;
+    max-width: 800px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.carousel-slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    text-align: center;
+}
+
+.slide img {
+    width: 100%; /* Koko leveys */
+    height: 300px; /* Kiinteä korkeus */
+    object-fit: cover; /* Varmistaa, että kuva ei veny */
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.slide h3 {
+    font-size: 1.5rem;
+    color: #f2d852;
+}
+
+.slide p {
+    font-size: 1rem;
+    color: #fff;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 18px;
+    z-index: 2; /* Nappien prioriteetti */
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
+
+.carousel-btn:hover {
+    background-color: #555;
+}
+
+.reserve-btn {
+    background-color: #9bcfb8;
+    color: #030303;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.reserve-btn:hover {
+    background-color: #f2d852;
+    color: #fff;
+}
+
+/* Parallaksiefekti */
+.food-carousel {
+    position: sticky;
+    top: 0; /* Pysyy näkyvillä yläreunassa */
+}
+
+/* Responsiivisuus */
+@media (max-width: 768px) {
+    .food-carousel h2 {
+        font-size: 3rem;
+    }
+    .slide img {
+        height: 200px; /* Pienemmät kuvat pienillä näytöillä */
+    }
+    .carousel-btn {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
+footer {
+    position: relative; /* Tai fixed, jos haluat footerin pysyvän paikallaan */
+    z-index: 10; /* Sama tai korkeampi kuin food sliderilla, jos tarvitsee olla sen päällä */
+    background-color: #f5de8d; /* Esimerkkiväri */
+    
+}
+/* Muutokset z-indeksiin */
+
+.top-nav-right {
+    position: relative;
+}
+

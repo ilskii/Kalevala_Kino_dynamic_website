@@ -1,0 +1,206 @@
+
+
+/* "Elokuvakerho"- otsikkoon lisää kokoa  */
+.otsikko {
+    font-family: "Pirata One", system-ui;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    color: #ffde9c;
+    margin-top: 10px;
+}
+
+/* bodytekstit kerhon esittelyosioon  */
+
+.esittely-otsikko p {
+    font-family: 'Roboto', 'sans-serif';
+    color: #ffde9c;
+    font-size: 20px;
+    font-weight:bold;
+}
+
+/* muotoilut kerhon esittelytekstiin  */
+.esittely p {
+    font-family: 'Roboto', 'sans-serif';
+    color: whitesmoke;
+    font-size: 20px;
+}
+
+/* container sisältää sliderin ja esittelyn*/
+.kerho-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #14162e;
+    margin: 40px;
+    padding: 20px;
+    border-radius: 24px;
+    padding-bottom: 120px;
+}
+
+/* esittelytekstin koko ja asettelu containerissa */
+.kerho-container .esittely {
+    flex: 1;
+    width: 30%;
+    justify-content:center;
+    align-items: center;
+    margin: 20px;
+    text-align: center;
+}
+ 
+/* tästä alkaa pelkästään kuvasliderin muotoilut */
+
+
+.slider-wrapper {
+    position: relative;
+    max-width: 58rem;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/*määrittelee tarkemminn sliderin toiminnallisuudet*/
+.slider {
+    display: flex;
+    aspect-ratio: 16 / 9;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    box-shadow: 0 1.5rem 3rem -0.75rem hsla(0, 0%, 0%, 0.25);
+    border-radius: 0.5rem;
+    
+}
+
+/*sliderin kuvien määrittelyä*/
+.slider img {
+    flex: 1 0 100%;
+    scroll-snap-align: start;
+    object-fit: cover;
+
+}
+
+/*sliderin navigaation (kuvien vaihto) toiminnot*/
+.slider-nav {
+    display: flex;
+    column-gap: 1rem;
+    position: absolute;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+/* sliderin tekstin muotoilut */
+.slider-nav a {
+ 
+    z-index: 1;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background-color: #fff;
+    opacity: 0.75;
+    transition: opacity ease 250ms;
+}
+
+/* hoverilla (kun hiiren siirtää päälle) nappula muuttuu*/
+.slider-nav a:hover {
+    opacity: 1;
+} 
+
+
+
+/* Elokuvaraati-osion tyylit */
+.elokuvaraati {
+    background-color: #14162e;
+    padding: 40px 20px;
+    text-align: center;
+    margin: 40px;
+    border-radius: 24px;
+}
+
+/* Jäsenien kuville hoverit */
+.elokuvaraati img:hover {
+    transform: scale(1.5);
+    transition: .3s ease-in-out;
+}
+
+/* otsikko*/
+.elokuvaraati h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #ffde9c;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* raatiosion tyylit */
+.raati-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+ 
+/* jokaiselle jäsenelle varatun tilan tyylit*/
+.raati-jasen {
+    width: 200px;
+    margin: 10px;
+    text-align: center;
+    color: #fff;
+}
+
+/* raatijäsenen kuvan määrittelyä*/
+.raati-jasen img {
+    width: 150px;
+    height: 200px;
+    border-radius: 30%;
+    max-width: 600px;
+    margin-bottom: 10px;
+    object-fit: cover;
+}
+
+/* jäsenen esittelytekstin tyylit*/
+.raati-jasen p {
+    font-family: 'Roboto', 'sans-serif';
+    color: whitesmoke;
+    font-size: 15px;
+}
+
+/* Responsiivisuus */
+
+@media (max-width: 734px) {
+    .otsikko h1 {
+        font-size: 48px;
+    }
+    .kerho-container {
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        margin: 0 auto;
+        padding: 0 auto;
+    }
+    .kerho-container .esittely {
+        width: 100%;
+    }
+    .kerho-container p {
+        text-align: center;
+    }
+    .esittely {
+        display: flex;
+        width: 100%;
+    }
+    .slider-wrapper {
+        width: 100%;
+    }
+    .elokuvaraati {
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .raati-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
