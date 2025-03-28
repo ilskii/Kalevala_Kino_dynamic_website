@@ -118,6 +118,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Elokuva tietokannan API
 
+// Dokumentaatio: https://www.omdbapi.com/ + https://app.readthedocs.org/projects/omdbpy/downloads/pdf/latest/
+
 // OMDb API-tiedot
 const apiKey = '989bb24e';
 const apiUrl = `http://www.omdbapi.com/?apikey=${apiKey}`;
