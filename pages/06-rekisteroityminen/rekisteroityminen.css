@@ -32,6 +32,14 @@ h1 {
   padding-right: 60px;
 }
 
+.container-signin a:visited {
+  color: #ffde9c;
+}
+
+.container-signin a {
+  color: #ffde9c;
+}
+
 /* otsikon muotoilut*/
 .register-container .title {
   font-size: 25px;
