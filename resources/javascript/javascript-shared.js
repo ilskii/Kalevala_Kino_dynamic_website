@@ -121,58 +121,58 @@ document.addEventListener("DOMContentLoaded", () => {
 // Dokumentaatio: https://www.omdbapi.com/ + https://app.readthedocs.org/projects/omdbpy/downloads/pdf/latest/
 
 // OMDb API-tiedot
-//hoidetaan git ignoren kautta myöhemmin, api-avain vain paikallisesti
-const apiKey = 'tähän apiKey';
-const apiUrl = `http://www.omdbapi.com/?apikey=${apiKey}`;
+// Käytetään api-avainta vain paikallisesti, HUOM! Avainta ei saa jakaa GitHubiin!
+const apiKey = 'tähän apiKey'; // Määritetään API-avain, jota käytetään OMDb API -kutsuihin
+const apiUrl = `http://www.omdbapi.com/?apikey=${apiKey}`; // Muodostetaan API:n perusosoite käyttäen API-avainta
 
 // Hakukentän toiminnallisuus
-document.getElementById('movie-search').addEventListener('input', async (event) => {
-    const query = event.target.value; // Käyttäjän hakutermi
-    if (query.length > 2) { // Suorita haku vain, jos hakutermi on pidempi kuin 2 merkkiä
-        try {
-            const response = await fetch(`${apiUrl}&s=${query}`);
-            if (!response.ok) throw new Error('Verkkovirhe API-kutsussa');
+document.getElementById('movie-search').addEventListener('input', async (event) => { // Lisätään tapahtumankuuntelija HTML-elementille, jonka id on 'movie-search'. Se reagoi käyttäjän syötteeseen (input).
+    const query = event.target.value; // Tallennetaan käyttäjän syöttämä hakutermi
+    if (query.length > 2) { // Suoritetaan haku vain, jos hakutermi on pidempi kuin 2 merkkiä
+        try { // Try-catch-lohko virheiden käsittelyyn. Kaikki sen sisällä oleva koodi suoritetaan, ja jos virhe tapahtuu, se siirtyy catch-lohkoon.
+            const response = await fetch(`${apiUrl}&s=${query}`); // Lähetetään API-kutsu hakemaan elokuvia hakutermillä
+            if (!response.ok) throw new Error('Verkkovirhe API-kutsussa'); // Annetaan virhe, jos kutsu epäonnistuu
             
-            const data = await response.json();
-            if (data.Search) {
-                const suggestionsElement = document.getElementById('search-suggestions');
-                suggestionsElement.textContent = ''; // Tyhjennä edelliset hakuehdotukset
+            const data = await response.json(); // Muunnetaan saatu vastaus JSON-muotoon. API:t lähettävät usein tietoa JSON-muodossa (JavaScript Object Notation), koska se on kevyt, helppolukuinen ja laajalti käytetty tietorakenne web-sovelluksissa.
+            if (data.Search) { // Tarkistetaan, löytyykö hakutuloksia
+                const suggestionsElement = document.getElementById('search-suggestions'); // Haetaan HTML-elementti, jonka id on 'search-suggestions', ja tallennetaan se muuttujaan suggestionsElement.
+                suggestionsElement.textContent = ''; // Tyhjennetään edelliset hakuehdotukset
 
-                // Lisää elokuvat hakuehdotuksiin
+                // Lisää löydetyt elokuvat hakuehdotuksiin
                 data.Search.forEach(movie => {
-                    const option = document.createElement('option');
-                    option.value = movie.Title; // Elokuvan otsikko
-                    suggestionsElement.appendChild(option);
+                    const option = document.createElement('option'); // Luodaan uusi elementti listaan
+                    option.value = movie.Title; // Määritetään elokuvan nimi hakuehdotukseksi
+                    suggestionsElement.appendChild(option); // Lisätään hakuehdotus DOM:iin
                 });
             }
         } catch (error) {
-            console.error('Virhe hakutuloksissa:', error);
+            console.error('Virhe hakutuloksissa:', error); // Tulostetaan virhe konsoliin, jos haku epäonnistuu
         }
     }
 });
 
 // Valitun elokuvan tiedot
 document.getElementById('movie-search').addEventListener('change', async (event) => {
-    const selectedMovie = event.target.value; // Käyttäjän valitsema elokuva
+    const selectedMovie = event.target.value; // Tallennetaan käyttäjän valitsema elokuvan nimi
     try {
-        const response = await fetch(`${apiUrl}&t=${selectedMovie}`);
-        if (!response.ok) throw new Error('Verkkovirhe API-kutsussa');
+        const response = await fetch(`${apiUrl}&t=${selectedMovie}`); // Lähetetään API-kutsu hakemaan yksityiskohtaiset tiedot valitusta elokuvasta
+        if (!response.ok) throw new Error('Verkkovirhe API-kutsussa'); // Heitetään virhe, jos kutsu epäonnistuu
         
-        const data = await response.json();
-        const searchResultTitle = document.getElementById('search-result-title');
-        const searchResultImage = document.querySelector('.search-result-image');
-        const searchResultText = document.querySelector('.search-result-text');
+        const data = await response.json(); // Muunnetaan saatu vastaus JSON-muotoon
+        const searchResultTitle = document.getElementById('search-result-title'); // Haetaan HTML-elementti ja tallennetaan se muuttujaksi, jotta sen sisältöä voidaan muokata myöhemmin
+        const searchResultImage = document.querySelector('.search-result-image'); // -''-
+        const searchResultText = document.querySelector('.search-result-text'); // -''-
 
-        if (data.Response === "True") {
-            // Päivitä elokuvan otsikko
+        if (data.Response === "True") { // Tarkistetaan, löytyykö elokuva
+            // Päivitetään elokuvan otsikko
             searchResultTitle.textContent = data.Title;
 
-            // Päivitä elokuvan kansikuva
+            // Päivitetään elokuvan kansikuva, jos saatavilla
             searchResultImage.src = data.Poster !== "N/A" ? data.Poster : "path/to/default_image.png";
             searchResultImage.alt = `${data.Title} movie poster`;
 
-            // Päivitä elokuvan tiedot (vuosi, genre, juoni)
-            searchResultText.textContent = ''; // Tyhjennä edelliset tiedot
+            // Päivitetään elokuvan lisätiedot (vuosi, genre, juoni)
+            searchResultText.textContent = ''; // Tyhjennetään edelliset tiedot
             const year = document.createElement('p');
             year.textContent = `Year: ${data.Year}`;
             const genre = document.createElement('p');
@@ -184,14 +184,13 @@ document.getElementById('movie-search').addEventListener('change', async (event)
             searchResultText.appendChild(genre);
             searchResultText.appendChild(plot);
         } else {
-            // Näytä viesti, jos elokuvaa ei löydy
+            // Näytetään viesti, jos elokuvaa ei löydy
             searchResultTitle.textContent = 'Elokuvaa ei löytynyt';
             searchResultImage.src = 'path/to/default_image.png';
             searchResultImage.alt = 'Oletuskansikuva';
             searchResultText.textContent = 'Ei tietoja saatavilla tästä elokuvasta.';
         }
     } catch (error) {
-        console.error('Virhe elokuvan tiedoissa:', error);
+        console.error('Virhe elokuvan tiedoissa:', error); // Tulostetaan virhe konsoliin
     }
 });
-
