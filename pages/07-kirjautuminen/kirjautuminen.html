@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kirjaudu sisään</title>
-    <link rel="stylesheet" href="../../pages/06-rekisteroityminen/rekisteroityminen.css">
+    <link rel="stylesheet" href="../../pages/07-kirjautuminen/kirjautuminen.css">
     <link rel="stylesheet" href="../../resources/css/styles.css">
      <!--Google Fonts: Pirata One ja Roboto-->
      <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,31 +63,28 @@
 
       <div class="register-container" id="register-container">
         
-            <form action="#">
-              <h1>Kirjaudu sisään</h1>
-              
-
-              <div class="user-details">
-               
-                
-                <div class="input-box">
-                    <span class="details">Sähköposti</span>
-                    <input type="text" placeholder="Anna sähköpostiosoite" required>
-                </div>
-               
-                <div class="input-box">
-                    <span class="details">Salasana</span>
-                    <input type="text" placeholder="Syötä salasana" required>
-                </div>
-               
-               </div> 
-               <div class="button">
-                <input type="submit" value="Sisään">
-               </div>
-            </form>
+        <form method="POST" action="login.php">
+            <h1>Kirjaudu sisään</h1>
+          
+            <div class="user-details">
+              <div class="input-box">
+                <span class="details">Sähköposti</span>
+                <input type="email" name="email" placeholder="Anna sähköpostiosoite" required>
+              </div>
+              <div class="input-box">
+                <span class="details">Salasana</span>
+                <input type="password" name="password" placeholder="Syötä salasana" required>
+              </div>
+            </div>
+          
+            <div class="button">
+              <input type="submit" value="Sisään">
+            </div>
+          </form>
+          
         </div>
             
-          </form>
+         
     </main>
 
 

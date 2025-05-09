@@ -63,7 +63,8 @@
 
       <div class="register-container" id="register-container">
         
-            <form method="POST" action="rekisteröityminen.php">
+
+            <form method="POST" action="rekisteroituminen.php">
               <h1>Rekisteröidy käyttäjäksi</h1>
               <p>Ole hyvä ja täytä alla olevat tiedot.</p>
 
@@ -89,8 +90,11 @@
                </div> 
                <div class="button">
                 <input type="submit" id="submit" value="Rekisteröidy">
-               </div>
+               </div>          
             </form>
+
+            <?php if (!empty($message)) echo $message; ?>
+
         </div>
              <div class="container-signin">
               <p>Oletko jo käyttäjä? <a href="../../pages/07-kirjautuminen/kirjautuminen.html">Kirjaudu sisään</a>.</p>

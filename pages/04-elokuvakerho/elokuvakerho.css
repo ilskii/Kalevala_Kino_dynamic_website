@@ -1,4 +1,6 @@
-
+.white-text {
+    color: white !important;
+}
 
 /* "Elokuvakerho"- otsikkoon lisää kokoa  */
 .otsikko {
@@ -164,6 +166,8 @@
     color: whitesmoke;
     font-size: 15px;
 }
+
+
 
 /* Responsiivisuus */
 
