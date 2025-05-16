@@ -194,3 +194,22 @@ document.getElementById('movie-search').addEventListener('change', async (event)
         console.error('Virhe elokuvan tiedoissa:', error); // Tulostetaan virhe konsoliin
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("../../pages/07-kirjautuminen/tarkista_sessio.php") // Tarkistetaan sessio PHP:stä
+        .then(response => response.json()) // Jäsennetään JSON-vastaus
+        .then(data => {
+            let loginLink = document.querySelector(".top-nav-right a[href='../../pages/07-kirjautuminen/kirjautuminen.html']");
+            let registerLink = document.querySelector(".top-nav-right a[href='../../pages/06-rekisteroityminen/rekisteroityminen.html']");
+
+            if (data.loggedIn) {
+                // Vaihdetaan "Kirjaudu" -> "Profiili"
+                loginLink.textContent = "Profiili";
+                loginLink.href = "../../pages/07-kirjautuminen/profiili.php";
+
+                // Piilotetaan "Rekisteröidy"
+                registerLink.style.display = "none";
+            }
+        })
+        .catch(error => console.error("Error fetching session data:", error));
+});
