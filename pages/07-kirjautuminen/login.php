@@ -1,41 +1,29 @@
 <?php
-session_start(); // Mahdollistaa istunnon käytön (esim. käyttäjän muistiin)
+session_start(); // Mahdollistaa istunnon käytön
 
-$servername = "localhost";
-$username = "root"; //MAMP
-$password = "root";  //MAMP
-$dbname = "kalevalakino"; //oma local hydocs
-
-// Yhteys
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Yhteys epäonnistui: " . $conn->connect_error);
-}
+require_once "connection.php"; // Yhdistetään tietokantaan
 
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = htmlspecialchars($_POST["email"]);
+    $email = trim(htmlspecialchars($_POST["email"])); // Suojataan syötteet
     $password = $_POST["password"];
 
     // Etsitään käyttäjä sähköpostilla
-    $stmt = $conn->prepare("SELECT id, firstname, password FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT UserID, FirstName, PasswordHash FROM users WHERE Email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
 
-    // Tarkistetaan löytyikö käyttäjä
     if ($stmt->num_rows == 1) {
         $stmt->bind_result($id, $firstname, $hashed_password);
         $stmt->fetch();
 
-        if (password_verify($password, $hashed_password)) {
-            // ✅ Oikea salasana: tallennetaan istuntotiedot
+        if (password_verify($password, $hashed_password)) { // Tarkistetaan salasana
             $_SESSION["user_id"] = $id;
             $_SESSION["firstname"] = $firstname;
 
-            // Ohjataan käyttäjä omalle sivulle
-            header("Location: profiili.php");
+            header("Location: profiili.php"); // Ohjataan käyttäjän profiiliin
             exit();
         } else {
             $message = "<p class='error'>Väärä salasana.</p>";
@@ -46,6 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->close();
 }
+
 $conn->close();
 ?>
-

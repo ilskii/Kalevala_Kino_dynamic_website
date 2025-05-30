@@ -1,25 +1,16 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "root"; // MAMP:in oletussalasana
-$dbname = "kalevalakino";
-
-// Luo yhteys
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Yhteys epäonnistui: " . $conn->connect_error);
-}
+require_once "connection.php"; // Yhdistetään tietokantaan
 
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $firstname = htmlspecialchars($_POST["FirstName"]);
-    $lastname = htmlspecialchars($_POST["LastName"]);
-    $email = htmlspecialchars($_POST["Email"]);
-    $password = password_hash($_POST["Password"], PASSWORD_DEFAULT);
+    $firstname = trim(htmlspecialchars($_POST["FirstName"])); // Suojataan syötteet
+    $lastname = trim(htmlspecialchars($_POST["LastName"]));
+    $email = trim(htmlspecialchars($_POST["Email"]));
+    $password = password_hash($_POST["Password"], PASSWORD_DEFAULT); // Hashataan salasana
 
-    // Tarkistetaan onko sähköposti jo käytössä
-    $checkStmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+    // Tarkistetaan, onko sähköposti jo käytössä
+    $checkStmt = $conn->prepare("SELECT UserID FROM users WHERE Email = ?");
     $checkStmt->bind_param("s", $email);
     $checkStmt->execute();
     $checkStmt->store_result();
@@ -28,12 +19,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "<p class='error'>Sähköposti on jo käytössä. Käytä toista osoitetta.</p>";
     } else {
         // Uuden käyttäjän lisääminen
-        $stmt = $conn->prepare("INSERT INTO users (firstname, lastname, email, password) VALUES (?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO users (FirstName, LastName, Email, PasswordHash) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $firstname, $lastname, $email, $password);
 
         if ($stmt->execute()) {
-            // ✅ Ohjataan kirjautumissivulle
-            header("Location: ../../pages/07-kirjautuminen/kirjautuminen.html");
+            header("Location: kirjautuminen.php"); // Ohjataan kirjautumissivulle
             exit();
         } else {
             $message = "<p class='error'>Virhe tallennuksessa: " . $stmt->error . "</p>";
@@ -42,5 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $checkStmt->close();
 }
+
 $conn->close();
 ?>

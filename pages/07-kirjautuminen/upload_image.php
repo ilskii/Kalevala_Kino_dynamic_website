@@ -6,15 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Tietokantayhteys:
-$servername = "localhost";
-$username = "root";
-$password = "root";
-$dbname = "kalevalakino";
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Yhteys epäonnistui: " . $conn->connect_error);
-}
+require_once "connection.php"; // Yhdistetään tietokantaan
 
 $userId = $_SESSION['user_id'];
 
@@ -35,19 +27,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES["profile_image"])) {
         if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $targetFile)) {
             $relativePath = "uploads/" . $newFileName;
 
+            // Päivitetään profiilikuva tietokannassa
             $stmt = $conn->prepare("UPDATE users SET profile_image = ? WHERE id = ?");
             $stmt->bind_param("si", $relativePath, $userId);
-            $stmt->execute();
-            $stmt->close();
-            $conn->close();
 
-            header("Location: profiili.php");
-            exit();
+            if ($stmt->execute()) {
+                header("Location: profiili.php");
+                exit();
+            } else {
+                echo "❌ Virhe profiilikuvan päivittämisessä: " . $stmt->error;
+            }
+
+            $stmt->close();
         } else {
-            echo "Virhe ladattaessa tiedostoa.";
+            echo "❌ Virhe ladattaessa tiedostoa.";
         }
     } else {
-        echo "Vain kuvatiedostot (JPG, PNG, GIF) sallitaan.";
+        echo "❌ Vain kuvatiedostot (JPG, PNG, GIF) sallitaan.";
     }
+
+    $conn->close();
 }
 ?>

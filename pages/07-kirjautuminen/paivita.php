@@ -1,36 +1,35 @@
 <?php
 session_start();
+
+// Tarkistetaan, onko käyttäjä kirjautunut
 if (!isset($_SESSION["user_id"])) {
     header("Location: kirjautuminen.html");
     exit();
 }
 
-$servername = "localhost";
-$username = "root";
-$password = "root";
-$dbname = "kalevalakino";
+require_once "connection.php"; // Yhdistetään tietokantaan
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Yhteys epäonnistui: " . $conn->connect_error);
+// Varmistetaan, että lomakkeen tiedot on lähetetty
+if (isset($_POST["firstname"], $_POST["lastname"], $_POST["email"])) {
+    $firstname = trim(htmlspecialchars($_POST["firstname"]));
+    $lastname = trim(htmlspecialchars($_POST["lastname"]));
+    $email = trim(htmlspecialchars($_POST["email"]));
+    $user_id = $_SESSION["user_id"];
+
+    // Päivitetään käyttäjän tiedot
+    $stmt = $conn->prepare("UPDATE users SET FirstName = ?, LastName = ?, Email = ? WHERE UserID = ?");
+    $stmt->bind_param("sssi", $firstname, $lastname, $email, $user_id);
+
+    if ($stmt->execute()) {
+        $_SESSION["firstname"] = $firstname; // Päivitetään istunnon nimi
+        header("Location: profiili.php");
+        exit();
+    } else {
+        echo "❌ Virhe päivityksessä: " . $stmt->error;
+    }
+
+    $stmt->close();
 }
 
-$firstname = htmlspecialchars($_POST["firstname"]);
-$lastname = htmlspecialchars($_POST["lastname"]);
-$email = htmlspecialchars($_POST["email"]);
-$user_id = $_SESSION["user_id"];
-
-$stmt = $conn->prepare("UPDATE users SET firstname = ?, lastname = ?, email = ? WHERE id = ?");
-$stmt->bind_param("sssi", $firstname, $lastname, $email, $user_id);
-
-if ($stmt->execute()) {
-    $_SESSION["firstname"] = $firstname; // Päivitetään istunnon nimi
-    header("Location: profiili.php");
-    exit();
-} else {
-    echo "Virhe päivityksessä: " . $stmt->error;
-}
-
-$stmt->close();
 $conn->close();
 ?>

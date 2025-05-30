@@ -5,18 +5,10 @@ if (!isset($_SESSION["user_id"])) {
     exit();
 }
 
-$servername = "localhost";
-$username = "root";
-$password = "root";
-$dbname = "kalevalakino";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Yhteys epäonnistui: " . $conn->connect_error);
-}
+require_once "connection.php"; // Yhdistetään tietokantaan
 
 $user_id = $_SESSION["user_id"];
-$sql = "SELECT firstname, lastname, email, profile_image FROM users WHERE id = ?";
+$sql = "SELECT FirstName, LastName, Email, ProfileImage FROM users WHERE UserID = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -93,7 +85,7 @@ $conn->close();
 
   <div class="profile-container" id="register-container">  
     <section class="profile-section">
-      <h2>Tervetuloa, <?php echo htmlspecialchars($user["firstname"]); ?>!</h2>
+      <h2>Tervetuloa, <?php echo htmlspecialchars($user["FirstName"]); ?>!</h2>
     </section>
 
     <section class="profile-section">
@@ -103,15 +95,15 @@ $conn->close();
         <button class="button" type="submit">Lataa kuva</button>
       </form>
 
-      <?php if (!empty($user['profile_image'])): ?>
-        <p>Kuvan polku: <?php echo htmlspecialchars($user['profile_image']); ?></p>
-        <img class="profile-picture" src="../../<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profiilikuva">
+      <?php if (!empty($user['ProfileImage'])): ?>
+        <p>Kuvan polku: <?php echo htmlspecialchars($user['ProfileImage']); ?></p>
+        <img class="profile-picture" src="../../<?php echo htmlspecialchars($user['ProfileImage']); ?>" alt="Profiilikuva">
       <?php endif; ?>
     </section>
 
     <section class="profile-section">
-      <p><strong>Nimi:</strong> <?php echo htmlspecialchars($user["firstname"] . " " . $user["lastname"]); ?></p>
-      <p><strong>Sähköposti:</strong> <?php echo htmlspecialchars($user["email"]); ?></p>
+      <p><strong>Nimi:</strong> <?php echo htmlspecialchars($user["FirstName"] . " " . $user["LastName"]); ?></p>
+      <p><strong>Sähköposti:</strong> <?php echo htmlspecialchars($user["Email"]); ?></p>
     </section>
 
     <section class="profile-section">
@@ -119,9 +111,9 @@ $conn->close();
       <form action="paivita.php" method="POST">
         <div class="user-details">
           <div class="input-box">
-            <input type="text" name="firstname" value="<?php echo htmlspecialchars($user["firstname"]); ?>" required>
-            <input type="text" name="lastname" value="<?php echo htmlspecialchars($user["lastname"]); ?>" required>
-            <input type="email" name="email" value="<?php echo htmlspecialchars($user["email"]); ?>" required>
+            <input type="text" name="firstname" value="<?php echo htmlspecialchars($user["FirstName"]); ?>" required>
+            <input type="text" name="lastname" value="<?php echo htmlspecialchars($user["LastName"]); ?>" required>
+            <input type="email" name="email" value="<?php echo htmlspecialchars($user["Email"]); ?>" required>
           </div>
         </div>
         <button class="button" type="submit">Päivitä tiedot</button>
@@ -137,55 +129,10 @@ $conn->close();
       <form action="poista.php" method="POST" onsubmit="return confirm('Haluatko varmasti poistaa tilisi?');">
             <button class="button" type="submit">Poista tili pysyvästi</button>
       </form>
-
-     
     </section>
   </div>
 </main>
 
-    <!--Footer-->
-    <footer>
-        <section class="footer-content-section">
-            <div class="container">
-                <div class="footer-content">
-                    <!-- Yhteystiedot -->
-                    <div class="footer-contact">
-                        <h3>Yhteystiedot:</h3>
-                        <p>Käyntiosoite:<br><br> Taitotalo, Valimotie 8<br> 00380 Helsinki</p>
-                        <p>info@4lphadev.fi<br> Puh. 045 xxxxxxx</p>
-                        <p>Teatteri ja baari avoinna:<br> Ma-to 16-22<br> Pe 16-22<br> La 11-24<br> Su 12-21</p>
-                        <p>Teatteripäällikkö Henkka Hellsten<br> Arkisin klo 10-16: 045-xxxxxx</p>
-                    </div>
-                    <!-- Logo -->
-                    <div class="footer-logo">
-                        <img src="../../resources/images/LOGO-Kalevala-Engrave-modified.png" alt="Kalevala Kino logo" width="75%" height="75%">
-                    </div>
-                    <!-- Uutiskirje ja some -->
-                    <div class="footer-news-social">
-                        <h3>Tilaa uutiskirje</h3>
-                        <input type="email" placeholder="Syötä sähköpostiosoite">
-                        <button>Lähetä</button>
-
-                        <h3>Löydät meidät somesta</h3>
-                        <div class="social-icons">
-                            <a href="#"><img src="../../resources/images/instagram.png" alt="Instagram"></a>
-                            <a href="#"><img src="../../resources/images/facebook.png" alt="Facebook"></a>
-                            <a href="#"><img src="../../resources/images/linkedin.png" alt="LinkedIn"></a>
-                            <a href="#"><img src="../../resources/images/youtube.png" alt="YouTube"></a>
-                            <a href="#"><img src="../../resources/images/tiktok.png" alt="TikTok"></a>
-                            <a href="#"><img src="../../resources/images/pinterest.png" alt="Pinterest"></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>© 2022 Kalevala Kino. All Rights Reserved.</p>
-                <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a></p>
-                </div>
-        </section>
-    </footer>
-    
-<!--Otetaan yhteinen javascript käyttöön-->
 <script src="../../resources/javascript/javascript-shared.js" defer></script>
 
 </body>
