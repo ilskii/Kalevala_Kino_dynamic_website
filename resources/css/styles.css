@@ -164,6 +164,9 @@
 .highlight {
     background-color: azure;
 }
+.hidden {
+  display: none !important;
+}
 
 /* Bodyn muotoilut */
 body {

@@ -29,16 +29,17 @@
     margin: 5px 0;
   }
   
-  input[type="text"],
-  input[type="email"],
-  input[type="file"] {
+.profile-input[type="text"],
+.profile-input[type="email"],
+.profile-input[type="file"] {
     padding: 10px;
     border-radius: 8px;
     border: none;
     width: 100%;
     margin-bottom: 10px;
     box-sizing: border-box;
-  }
+}
+
   
   .button {
     padding: 10px 20px;

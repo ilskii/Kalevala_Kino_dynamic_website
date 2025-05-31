@@ -122,94 +122,133 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // OMDb API-tiedot
 // Käytetään api-avainta vain paikallisesti, HUOM! Avainta ei saa jakaa GitHubiin!
-const apiKey = 'tähän apiKey'; // Määritetään API-avain, jota käytetään OMDb API -kutsuihin
+const apiKey = '989bb24e'; // Määritetään API-avain, jota käytetään OMDb API -kutsuihin
 const apiUrl = `http://www.omdbapi.com/?apikey=${apiKey}`; // Muodostetaan API:n perusosoite käyttäen API-avainta
 
-// Hakukentän toiminnallisuus
-document.getElementById('movie-search').addEventListener('input', async (event) => { // Lisätään tapahtumankuuntelija HTML-elementille, jonka id on 'movie-search'. Se reagoi käyttäjän syötteeseen (input).
+// Hakukentän toiminnallisuus elokuvien etsimiseen OMDb API:n avulla
+// Tarkistetaan, että HTML-elementti, jonka id on 'movie-search', löytyy DOM:sta
+const movieSearchElementForInput = document.getElementById('movie-search');
+if (movieSearchElementForInput) {
+  // Lisätään tapahtumankuuntelija HTML-elementille, jonka id on 'movie-search'. Tämä reagoi käyttäjän syötteeseen (input).
+  movieSearchElementForInput.addEventListener('input', async (event) => {
     const query = event.target.value; // Tallennetaan käyttäjän syöttämä hakutermi
     if (query.length > 2) { // Suoritetaan haku vain, jos hakutermi on pidempi kuin 2 merkkiä
-        try { // Try-catch-lohko virheiden käsittelyyn. Kaikki sen sisällä oleva koodi suoritetaan, ja jos virhe tapahtuu, se siirtyy catch-lohkoon.
-            const response = await fetch(`${apiUrl}&s=${query}`); // Lähetetään API-kutsu hakemaan elokuvia hakutermillä
-            if (!response.ok) throw new Error('Verkkovirhe API-kutsussa'); // Annetaan virhe, jos kutsu epäonnistuu
-            
-            const data = await response.json(); // Muunnetaan saatu vastaus JSON-muotoon. API:t lähettävät usein tietoa JSON-muodossa (JavaScript Object Notation), koska se on kevyt, helppolukuinen ja laajalti käytetty tietorakenne web-sovelluksissa.
-            if (data.Search) { // Tarkistetaan, löytyykö hakutuloksia
-                const suggestionsElement = document.getElementById('search-suggestions'); // Haetaan HTML-elementti, jonka id on 'search-suggestions', ja tallennetaan se muuttujaan suggestionsElement.
-                suggestionsElement.textContent = ''; // Tyhjennetään edelliset hakuehdotukset
+      try { // Try-catch-lohko virheiden käsittelyyn. Kaikki sen sisällä oleva koodi suoritetaan, ja jos virhe tapahtuu, se siirtyy catch-lohkoon.
+        const response = await fetch(`${apiUrl}&s=${encodeURIComponent(query)}`); // Lähetetään API-kutsu hakemaan elokuvia hakutermillä
+        if (!response.ok) throw new Error('Verkkovirhe API-kutsussa'); // Annetaan virhe, jos kutsu epäonnistuu
 
-                // Lisää löydetyt elokuvat hakuehdotuksiin
-                data.Search.forEach(movie => {
-                    const option = document.createElement('option'); // Luodaan uusi elementti listaan
-                    option.value = movie.Title; // Määritetään elokuvan nimi hakuehdotukseksi
-                    suggestionsElement.appendChild(option); // Lisätään hakuehdotus DOM:iin
-                });
-            }
-        } catch (error) {
-            console.error('Virhe hakutuloksissa:', error); // Tulostetaan virhe konsoliin, jos haku epäonnistuu
+        const data = await response.json(); // Muunnetaan saatu vastaus JSON-muotoon. API:t lähettävät usein tietoa JSON-muodossa (JavaScript Object Notation), koska se on kevyt, helppolukuinen ja laajalti käytetty tietorakenne web-sovelluksissa.
+        if (data.Search) { // Tarkistetaan, löytyykö hakutuloksia
+          // Haetaan HTML-elementti, jonka id on 'search-suggestions', ja tallennetaan se muuttujaan suggestionsElement.
+          const suggestionsElement = document.getElementById('search-suggestions');
+          if (suggestionsElement) { // Varmistetaan, että elementti löytyy
+            suggestionsElement.textContent = ''; // Tyhjennetään edelliset hakuehdotukset
+
+            // Lisää löydetyt elokuvat hakuehdotuksiin
+            data.Search.forEach(movie => {
+              const option = document.createElement('option'); // Luodaan uusi elementti listaan
+              option.value = movie.Title; // Määritetään elokuvan nimi hakuehdotukseksi
+              suggestionsElement.appendChild(option); // Lisätään hakuehdotus DOM:iin
+            });
+          }
         }
+      } catch (error) {
+        console.error('Virhe hakutuloksissa:', error); // Tulostetaan virhe konsoliin, jos haku epäonnistuu
+      }
     }
-});
+  });
+}
+
+
 
 // Valitun elokuvan tiedot
-document.getElementById('movie-search').addEventListener('change', async (event) => {
+const movieSearchElementForChange = document.getElementById('movie-search');
+if (movieSearchElementForChange) {
+  movieSearchElementForChange.addEventListener('change', async (event) => {
     const selectedMovie = event.target.value; // Tallennetaan käyttäjän valitsema elokuvan nimi
     try {
-        const response = await fetch(`${apiUrl}&t=${selectedMovie}`); // Lähetetään API-kutsu hakemaan yksityiskohtaiset tiedot valitusta elokuvasta
-        if (!response.ok) throw new Error('Verkkovirhe API-kutsussa'); // Heitetään virhe, jos kutsu epäonnistuu
-        
-        const data = await response.json(); // Muunnetaan saatu vastaus JSON-muotoon
-        const searchResultTitle = document.getElementById('search-result-title'); // Haetaan HTML-elementti ja tallennetaan se muuttujaksi, jotta sen sisältöä voidaan muokata myöhemmin
-        const searchResultImage = document.querySelector('.search-result-image'); // -''-
-        const searchResultText = document.querySelector('.search-result-text'); // -''-
+      // Lähetetään API-kutsu hakemaan yksityiskohtaiset tiedot valitusta elokuvasta.
+      // Käytetään encodeURIComponent, jotta syöte on turvallisesti URL:ssä.
+      const response = await fetch(`${apiUrl}&t=${encodeURIComponent(selectedMovie)}`);
+      if (!response.ok) throw new Error('Verkkovirhe API-kutsussa'); // Heitetään virhe, jos kutsu epäonnistuu
+      
+      const data = await response.json(); // Muunnetaan saatu vastaus JSON-muotoon
+      
+      // Haetaan elementit, joiden sisältöä päivitetään
+      const searchResultTitle = document.getElementById('search-result-title'); // Haetaan elokuvan otsikkoa varten oleva elementti
+      const searchResultImage = document.querySelector('.search-result-image'); // Haetaan elokuvan kansikuvaa varten oleva elementti
+      const searchResultText = document.querySelector('.search-result-text'); // Haetaan elokuvan lisätietoja varten oleva elementti
 
-        if (data.Response === "True") { // Tarkistetaan, löytyykö elokuva
-            // Päivitetään elokuvan otsikko
-            searchResultTitle.textContent = data.Title;
-
-            // Päivitetään elokuvan kansikuva, jos saatavilla
-            searchResultImage.src = data.Poster !== "N/A" ? data.Poster : "path/to/default_image.png";
-            searchResultImage.alt = `${data.Title} movie poster`;
-
-            // Päivitetään elokuvan lisätiedot (vuosi, genre, juoni)
-            searchResultText.textContent = ''; // Tyhjennetään edelliset tiedot
-            const year = document.createElement('p');
-            year.textContent = `Year: ${data.Year}`;
-            const genre = document.createElement('p');
-            genre.textContent = `Genre: ${data.Genre}`;
-            const plot = document.createElement('p');
-            plot.textContent = `Plot: ${data.Plot}`;
-
-            searchResultText.appendChild(year);
-            searchResultText.appendChild(genre);
-            searchResultText.appendChild(plot);
-        } else {
-            // Näytetään viesti, jos elokuvaa ei löydy
-            searchResultTitle.textContent = 'Elokuvaa ei löytynyt';
-            searchResultImage.src = 'path/to/default_image.png';
-            searchResultImage.alt = 'Oletuskansikuva';
-            searchResultText.textContent = 'Ei tietoja saatavilla tästä elokuvasta.';
+      if (data.Response === "True") { // Tarkistetaan, löytyykö elokuva
+        // Päivitetään elokuvan otsikko
+        if (searchResultTitle) {
+          searchResultTitle.textContent = data.Title;
         }
+        
+        // Päivitetään elokuvan kansikuva, jos saatavilla
+        if (searchResultImage) {
+          searchResultImage.src = data.Poster !== "N/A" ? data.Poster : "path/to/default_image.png";
+          searchResultImage.alt = `${data.Title} movie poster`;
+        }
+        
+        // Päivitetään elokuvan lisätiedot (vuosi, genre, juoni)
+        if (searchResultText) {
+          searchResultText.textContent = ''; // Tyhjennetään edelliset tiedot
+          const year = document.createElement('p');
+          year.textContent = `Year: ${data.Year}`;
+          const genre = document.createElement('p');
+          genre.textContent = `Genre: ${data.Genre}`;
+          const plot = document.createElement('p');
+          plot.textContent = `Plot: ${data.Plot}`;
+    
+          searchResultText.appendChild(year);
+          searchResultText.appendChild(genre);
+          searchResultText.appendChild(plot);
+        }
+      } else {
+        // Näytetään viesti, jos elokuvaa ei löydy
+        if (searchResultTitle) {
+          searchResultTitle.textContent = 'Elokuvaa ei löytynyt';
+        }
+        if (searchResultImage) {
+          searchResultImage.src = 'path/to/default_image.png';
+          searchResultImage.alt = 'Oletuskansikuva';
+        }
+        if (searchResultText) {
+          searchResultText.textContent = 'Ei tietoja saatavilla tästä elokuvasta.';
+        }
+      }
     } catch (error) {
-        console.error('Virhe elokuvan tiedoissa:', error); // Tulostetaan virhe konsoliin
+      console.error('Virhe elokuvan tiedoissa:', error); // Tulostetaan virhe konsoliin, jos haku epäonnistuu
     }
-});
+  });
+}
 
+
+// Kirjautumisen ja rekisteröitymisen linkkien muokkaus sessiotietojen perusteella
 document.addEventListener("DOMContentLoaded", function () {
-    fetch("../../pages/07-kirjautuminen/tarkista_sessio.php") // Tarkistetaan sessio PHP:stä
-        .then(response => response.json()) // Jäsennetään JSON-vastaus
-        .then(data => {
-            let loginLink = document.querySelector(".top-nav-right a[href='../../pages/07-kirjautuminen/kirjautuminen.html']");
-            let registerLink = document.querySelector(".top-nav-right a[href='../../pages/06-rekisteroityminen/rekisteroityminen.html']");
+  fetch("../../pages/07-kirjautuminen/tarkista_sessio.php")
+    .then(response => response.json())
+    .then(data => {
+      // Valitse kaikki saman id:n omaavat elementit (koska ne esiintyvät kahdessa eri navissa)
+      const profileLinks = document.querySelectorAll("#profile-link");
+      const loginLinks = document.querySelectorAll("#login-link");
+      const logoutLinks = document.querySelectorAll("#logout-link");
+      const registerLinks = document.querySelectorAll("#register-link");
 
-            if (data.loggedIn) {
-                // Vaihdetaan "Kirjaudu" -> "Profiili"
-                loginLink.textContent = "Profiili";
-                loginLink.href = "../../pages/07-kirjautuminen/profiili.php";
-
-                // Piilotetaan "Rekisteröidy"
-                registerLink.style.display = "none";
-            }
-        })
-        .catch(error => console.error("Error fetching session data:", error));
+      if (data.loggedIn) {
+        // Käyttäjä on kirjautunut: näytetään profiilisivu ja piilotetaan kirjaudu/rekisteröidy
+        profileLinks.forEach(link => link.style.display = "");
+        loginLinks.forEach(link => link.style.display = "none");
+        logoutLinks.forEach(link => link.style.display = "");
+        registerLinks.forEach(link => link.style.display = "none");
+      } else {
+        // Käyttäjä ei ole kirjautunut: piilotetaan profiilisivu ja näytetään kirjaudu/rekisteröidy
+        profileLinks.forEach(link => link.style.display = "none");
+        loginLinks.forEach(link => link.style.display = "");
+        logoutLinks.forEach(link => link.style.display = "none");
+        registerLinks.forEach(link => link.style.display = "");
+      }
+    })
+    .catch(error => console.error("Error fetching session data:", error));
 });

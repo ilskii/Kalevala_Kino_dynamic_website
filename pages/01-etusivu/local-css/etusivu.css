@@ -1,6 +1,6 @@
 /* Tänne paikalliset CSS, kirjastot/framet/yhteinen CSS -> resources/css */
 
-/*Tervetuloa-title*/
+/* Tervetuloa-title */
 .tervetuloa-title {
     font-family: "Pirata One", system-ui;
     display: flex;
@@ -16,13 +16,35 @@
     margin-left: 10%;
     margin-bottom: 1%;
 }
+
 /* "Suosituimmat elokuvat"-kuvat */
 .top-films {
     display: flex;
     transition: transform 0.5s ease-in-out;
     margin-left: 10%;
+    width: max-content; /* Mahdollistaa kuvien ylittämisen säiliön */
+    position: relative;
 }
 
+/* Kuvien muotoilu */
+.slide img {
+    width: 500px; /* Suurempi kuvakoko */
+    height: auto;
+    border-radius: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    transition: transform 0.3s ease-in-out;
+    transform-origin: center;
+}
+
+/* Kuvien zoomaus ilman reunojen katoamista */
+.slide img:hover {
+    transform: scale(1.15);
+    position: relative; /* Estää kuvan rajojen katoamisen */
+    z-index: 10; /* Nostaa kuvan muiden päälle */
+}
+
+/* Top-films container */
 .top-films-container {
     display: flex;
     flex-direction: column;
@@ -33,6 +55,34 @@
     margin-left: 1%;
     margin-right: 1%;
     border-radius: 24px;
+    overflow: hidden; /* Estää kuvien ylittämisen näkyvästä alueesta */
+    position: relative; /* Tarvitaan pseudo-elementtien sijainnille */
+}
+
+/* Vasen fade kuvakaruselliin */
+.top-films-container::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 150px;
+    height: 100%;
+    background: linear-gradient(to right, #14162e 0%, #14162e 50%, rgba(20,22,46,0) 100%);
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* Oikea fade kuvakaruselliin */
+.top-films-container::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 150px;
+    height: 100%;
+    background: linear-gradient(to left, #14162e 0%, #14162e 50%, rgba(20,22,46,0) 100%);
+    z-index: 5;
+    pointer-events: none;
 }
 
 /* "Ajankohtaista" */
@@ -68,8 +118,11 @@
     border-radius: 24px;
 }
 
-/*Responsiivisuus*/
+.hidden {
+  display: none !important;
+}
 
+/* Responsiivisuus */
 @media (max-width: 734px) {
     .tervetuloa-title h1 {
         font-size: 36px;
@@ -129,16 +182,7 @@
     }
 }
 
-
-/* Suosituimmat elokuvat -kuvakaruselli */
-
-.slide { 
-    box-sizing: border-box; 
-}
-.slide img {
-    border-radius: 10px;
-    transition: transform 0.3s ease;
-}
+/* Carousel buttonit */
 .carousel-btn {
     position: absolute;
     top: 50%;
@@ -149,18 +193,18 @@
     padding: 10px;
     cursor: pointer;
     border-radius: 50%;
-    font-size: 18px;
+    font-size: 50px;
     z-index: 100;
 }
+
 .prev-btn {
-    left: 1%;
+    left: 5px;
 }
+
 .next-btn {
-    right: 1%;
+    right: 5px;
 }
+
 .carousel-btn:hover {
     background-color: rgba(0,0,0,0.7);
-}
-.slide img:hover {
-    transform: scale(1.15);
 }
