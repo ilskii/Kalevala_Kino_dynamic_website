@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // OMDb API-tiedot
 // Käytetään api-avainta vain paikallisesti, HUOM! Avainta ei saa jakaa GitHubiin!
-const apiKey = '989bb24e'; // Määritetään API-avain, jota käytetään OMDb API -kutsuihin
+const apiKey = 'tähän API-avain'; // Määritetään API-avain, jota käytetään OMDb API -kutsuihin
 const apiUrl = `http://www.omdbapi.com/?apikey=${apiKey}`; // Muodostetaan API:n perusosoite käyttäen API-avainta
 
 // Hakukentän toiminnallisuus elokuvien etsimiseen OMDb API:n avulla
